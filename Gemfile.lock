@@ -63,6 +63,9 @@ GEM
     concurrent-ruby (1.1.6)
     crass (1.0.6)
     dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     erubi (1.9.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -142,6 +145,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   dotenv (~> 2.1, >= 2.1.1)
+  dotenv-rails (~> 2.7, >= 2.7.5)
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   rails (~> 6.0.2, >= 6.0.2.2)
