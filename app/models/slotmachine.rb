@@ -1,0 +1,2 @@
+class Slotmachine < ApplicationRecord
+end
