@@ -8,7 +8,8 @@ module Api
       end
 
       def spin
-        render json: 10
+        slot_machine = SlotMachine.find(params[:id])
+        render json: slot_machine.spin
       end
     end
   end
