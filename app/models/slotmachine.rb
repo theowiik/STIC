@@ -1,2 +1,0 @@
-class Slotmachine < ApplicationRecord
-end
