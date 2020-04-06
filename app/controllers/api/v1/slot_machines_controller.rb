@@ -6,6 +6,10 @@ module Api
       def index
         render json: SlotMachine.all
       end
+
+      def spin
+        render json: 10
+      end
     end
   end
 end
