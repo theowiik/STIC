@@ -1,3 +1,4 @@
+# A slot machine.
 class SlotMachine < ApplicationRecord
   has_many :slot_machine_symbols
 
