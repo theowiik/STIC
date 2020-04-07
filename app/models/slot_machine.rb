@@ -1,4 +1,6 @@
 class SlotMachine < ApplicationRecord
+  has_many :slot_machine_symbols
+
   # Spins the slot machine, and returns the grid of symbols.
   # TODO: Represent as rows or reels?
   #
