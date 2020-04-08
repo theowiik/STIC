@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'slot_machines/:id/spin', to: 'slot_machines#spin'
       resources :slot_machines
+      resources :users
     end
   end
 end
