@@ -8,6 +8,8 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.1'
 gem 'dotenv-rails', '~> 2.7', '>= 2.7.5'
 gem 'dotenv', '~> 2.1', '>= 2.1.1'
+gem 'knock', '~> 2.1', '>= 2.1.1'
+gem 'bcrypt', '~> 3.1', '>= 3.1.13'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 
