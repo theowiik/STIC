@@ -9,8 +9,20 @@ module Api
       end
 
       def spin
-        slot_machine = SlotMachine.find(params[:id])
-        render json: slot_machine.random_grid
+        bet = 10                # will be given by params
+        user = User.all.sample  # sample user
+        no_bet = false          # if no bet was provided
+
+        return render json: 'Invalid bet.' if bet <= 0 || no_bet
+
+        # This might work if we have a constraint that balance >= 0.
+        # TODO: IS this concurrent?
+        if user.decrement(:balance, bet).save
+          slot_machine = SlotMachine.find(params[:id])
+          return render json: slot_machine.random_grid
+        end
+
+        render json: 'Insufficient funds.'
       end
     end
   end
