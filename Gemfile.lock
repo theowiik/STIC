@@ -56,7 +56,6 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2)
-    bcrypt (3.1.13)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -74,11 +73,6 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    jwt (1.5.6)
-    knock (2.1.1)
-      bcrypt (~> 3.1)
-      jwt (~> 1.5)
-      rails (>= 4.2)
     loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -150,13 +144,11 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  bcrypt (~> 3.1, >= 3.1.13)
   bootsnap (>= 1.4.2)
   byebug
   dotenv (~> 2.1, >= 2.1.1)
   dotenv-rails (~> 2.7, >= 2.7.5)
   faker (~> 1.6, >= 1.6.3)
-  knock (~> 2.1, >= 2.1.1)
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   rails (~> 6.0.2, >= 6.0.2.2)
