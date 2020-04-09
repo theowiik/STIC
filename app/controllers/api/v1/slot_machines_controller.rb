@@ -5,7 +5,7 @@ module Api
     # The controller for slot machines.
     class SlotMachinesController < ApplicationController
       def index
-        render json: SlotMachine.all
+        render json: SlotMachine.all.sample.slot_machine_symbols
       end
 
       def spin
