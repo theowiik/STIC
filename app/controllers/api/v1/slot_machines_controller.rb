@@ -9,7 +9,7 @@ module Api
       end
 
       def spin
-        bet = 10                # will be given by params
+        bet = params[:bet].to_i # will be given by params
         user = User.all.sample  # sample user
         no_bet = false          # if no bet was provided
 
