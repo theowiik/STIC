@@ -13,6 +13,7 @@ module Api
         user = User.all.sample  # sample user
         no_bet = false          # if no bet was provided
 
+        # Invalid bet
         if bet <= 0 || no_bet
           return render json:
             {
@@ -23,31 +24,25 @@ module Api
             }
         end
 
-        begin
-          if user.decrement(:balance, bet).save
-            slot_machine = SlotMachine.find(params[:id])
-            return render json: {
-              status: 200,
-              matrix: slot_machine.random_grid,
-              balance: user.balance,
-              payout: 1000
-            }
-          end
-        rescue
-          return render json: {
+        # Affords
+        if user.decrement(:balance, bet).save
+          slot_machine = SlotMachine.find(params[:id])
+          render json: {
+            status: 200,
+            matrix: slot_machine.random_grid,
+            balance: user.balance,
+            payout: 1000
+          }
+
+        # Does not afford
+        else
+          render json: {
             status: 400,
             error: {
               message: "Insufficient funds: you can't afford playing this. Poor person. lol"
             }
           }
         end
-
-        render json: {
-          status: 500,
-          error: {
-            message: 'You should not be here.'
-          }
-        }
       end
     end
   end
