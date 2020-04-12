@@ -77,5 +77,46 @@ class SlotMachine < ApplicationRecord
     raise ArgumentError, 'n_lines is not numeric' unless bet.is_a? Integer
 
     raise RangeError, 'n_lines must be greater than 0' unless n_lines.positive?
+
+    # TODO: Add another check if the width and height is correct.
+
+    lines = [[0, 0, 0, 1], [0, 1, 0, 0]]
+    output = []
+
+    lines.each do |line|
+      symbols_in_line = symbols_in_line()
+
+      # Count amount
+      symbols_in_line.uniq(&id).each do |symbol|
+        n = symbols_in_line.select { |s| s.id == symbol.id }.count
+        output << symbol if n >= 3  # TODO: Add some logical reasoning here
+      end
+    end
+
+    output
+  end
+
+  #
+  # Returns the symbols that are in a specific line.
+  #
+  # @param [Array<Array<SlotMachineSymbol>>]  grid the grid to extract
+  #                                           symols from.
+  # @param [Array<Integer>] line the bitmap of the line.
+  #
+  # TODO: Add exceptions.
+  #
+  # @return [Array<SlotMachineSymbol>] an array of symbols
+  #
+  def symbols_in_line(grid, line)
+    columns = 3 # will be in the model
+    output = []
+
+    line.each_with_index do |_, i|
+      row = i / columns
+      column = i - row * columns
+      output << grid[row][column]
+    end
+
+    output
   end
 end
