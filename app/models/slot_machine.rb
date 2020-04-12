@@ -1,10 +1,14 @@
+#
 # A slot machine.
+#
 class SlotMachine < ApplicationRecord
   has_many :slot_machine_symbols
 
-  # Spins the slot machine, and returns the grid of symbols.
   #
-  # @return [List[List[Int]]] the grid of symbols.
+  # Returns a grid of symbols.
+  #
+  # @return [Array<Array<>>] a grid of symbols.
+  #
   def random_grid
     rows = 3
     matrix = []
@@ -16,20 +20,33 @@ class SlotMachine < ApplicationRecord
     matrix
   end
 
-  # Given a grid of symbols and a bet, returns how much winnings there are.
   #
-  # @param [List[List[Int]]] the grid of symbols.
-  # @param []
-  # @return [Int] the winnings.
-  def reels_to_winnings(grid, bet)
-    return 10 * bet
+  # Given a matrix of symbols (a list of rows) and a bet, returns
+  # how much winnings there are.
+  #
+  # @param [Array<Array<SlotMachineSymbol>>] grid the grid of symbols.
+  # @param [<Type>] bet the bet amount.
+  #
+  # @raise [ArgumentError] if the grid is not a array.
+  # @raise [ArgumentError] if bet is not a integer.
+  #
+  # @return [Integer] the payout.
+  #
+  def calculate_winnings(grid, bet)
+    raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
+
+    raise ArgumentError, 'Bet is not numeric' unless bet.is_a? Integer
+
+    bet * 10
   end
 
   private
 
-  # Returns a row of symbols.
   #
-  # @return [List[SlotMachineSymbol]] a row of symbols.
+  # Returns a random row of symbols with the same amount of elements as columns.
+  #
+  # @return [Array<SlotMachineSymbol>] a row of symbols.
+  #
   def random_row
     cols = 3
     row = []
@@ -39,5 +56,26 @@ class SlotMachine < ApplicationRecord
     end
 
     row
+  end
+
+  #
+  # Given a grid of symbols (a list of rows) and the number of lines, returns
+  # an array of symbols that are the winning symbols.
+  #
+  # @param [Array<Array<SlotMachineSymbol>>] grid the grid of symbols.
+  # @param [Integer] n_lines the amount of lines to check.
+  #
+  # @raise [ArgumentError] if the grid is not a array.
+  # @raise [ArgumentError] if n_lines is not a integer.
+  # @raise [RangeError] if n_lines is smaller than one.
+  #
+  # @return [Array<SlotMachineSymbol>] an array of the winning symbols.
+  #
+  def winning_symbols(grid, n_lines)
+    raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
+
+    raise ArgumentError, 'n_lines is not numeric' unless bet.is_a? Integer
+
+    raise RangeError, 'n_lines must be greater than 0' unless n_lines.positive?
   end
 end
