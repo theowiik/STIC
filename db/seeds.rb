@@ -19,3 +19,9 @@ end
 
 puts('Created a sample user...')
 User.create(name: 'Joe Danger', email: 'joe@danger.com')
+
+puts('Create some lines for 3 * 3 machines...')
+bitmaps = %w([111000000] [000111000] [000000111])
+bitmaps.each do |bitmap|
+  Line.create(rows: 3, columns: 3, bitmap: bitmap)
+end

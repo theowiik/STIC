@@ -26,6 +26,43 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: lines; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.lines (
+    id bigint NOT NULL,
+    rows integer DEFAULT 1 NOT NULL,
+    columns integer DEFAULT 1 NOT NULL,
+    bitmap character varying DEFAULT '0'::character varying NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    CONSTRAINT non_negative_columns CHECK ((columns > 0)),
+    CONSTRAINT non_negative_rows CHECK ((rows > 0)),
+    CONSTRAINT valid_bitmap_characters CHECK (((bitmap)::text ~* '^[0|1]+$'::text)),
+    CONSTRAINT valid_bitmap_length CHECK ((length((bitmap)::text) = (rows * columns)))
+);
+
+
+--
+-- Name: lines_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.lines_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: lines_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.lines_id_seq OWNED BY public.lines.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -105,7 +142,7 @@ CREATE TABLE public.users (
     id bigint NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
-    balance integer DEFAULT 0,
+    balance integer DEFAULT 0 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     CONSTRAINT non_negative_balance CHECK ((balance >= 0))
@@ -129,6 +166,13 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: lines id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lines ALTER COLUMN id SET DEFAULT nextval('public.lines_id_seq'::regclass);
 
 
 --
@@ -158,6 +202,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: lines lines_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.lines
+    ADD CONSTRAINT lines_pkey PRIMARY KEY (id);
 
 
 --
@@ -217,6 +269,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200406154940'),
 ('20200407160301'),
 ('20200407185200'),
-('20200409164138');
+('20200413124203');
 
 
