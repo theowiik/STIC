@@ -101,7 +101,7 @@ class SlotMachine < ApplicationRecord
   #
   # @param [Array<Array<SlotMachineSymbol>>]  grid the grid to extract
   #                                           symols from.
-  # @param [Array<Integer>] line the bitmap of the line.
+  # @param [Line] line the line.
   #
   # TODO: Add exceptions.
   #
@@ -111,7 +111,9 @@ class SlotMachine < ApplicationRecord
     columns = 3 # will be in the model
     output = []
 
-    line.each_with_index do |_, i|
+    line.bitmap.each_with_index do |bit, i|
+      next if bit != '1'
+
       row = i / columns
       column = i - row * columns
       output << grid[row][column]
