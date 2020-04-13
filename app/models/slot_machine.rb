@@ -34,7 +34,6 @@ class SlotMachine < ApplicationRecord
   #
   def calculate_winnings(grid, bet)
     raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
-
     raise ArgumentError, 'Bet is not numeric' unless bet.is_a? Integer
 
     bet * 10
@@ -73,23 +72,21 @@ class SlotMachine < ApplicationRecord
   #
   def winning_symbols(grid, n_lines)
     raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
-
     raise ArgumentError, 'n_lines is not numeric' unless bet.is_a? Integer
-
     raise RangeError, 'n_lines must be greater than 0' unless n_lines.positive?
 
     # TODO: Add another check if the width and height is correct.
 
-    lines = [[0, 0, 0, 1], [0, 1, 0, 0]]
+    lines = Line.where(rows: rows, columns: columns)
     output = []
 
     lines.each do |line|
-      symbols_in_line = symbols_in_line()
+      symbols_in_line = symbols_in_line(grid, line)
 
       # Count amount
       symbols_in_line.uniq(&id).each do |symbol|
         n = symbols_in_line.select { |s| s.id == symbol.id }.count
-        output << symbol if n >= 3  # TODO: Add some logical reasoning here
+        output << symbol if n >= 3 # TODO: Add some logical reasoning here
       end
     end
 
