@@ -36,8 +36,8 @@ CREATE TABLE public.lines (
     bitmap character varying DEFAULT '0'::character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT non_negative_columns CHECK ((columns > 0)),
-    CONSTRAINT non_negative_rows CHECK ((rows > 0)),
+    CONSTRAINT positive_columns CHECK ((columns > 0)),
+    CONSTRAINT positive_rows CHECK ((rows > 0)),
     CONSTRAINT valid_bitmap_characters CHECK (((bitmap)::text ~* '^[0|1]+$'::text)),
     CONSTRAINT valid_bitmap_length CHECK ((length((bitmap)::text) = (rows * columns)))
 );
@@ -110,8 +110,12 @@ ALTER SEQUENCE public.slot_machine_symbols_id_seq OWNED BY public.slot_machine_s
 CREATE TABLE public.slot_machines (
     id bigint NOT NULL,
     name character varying NOT NULL,
+    rows integer DEFAULT 1 NOT NULL,
+    columns integer DEFAULT 1 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    CONSTRAINT positive_columns CHECK ((columns > 0)),
+    CONSTRAINT positive_rows CHECK ((rows > 0))
 );
 
 
@@ -145,7 +149,7 @@ CREATE TABLE public.users (
     balance integer DEFAULT 0 NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT non_negative_balance CHECK ((balance >= 0))
+    CONSTRAINT positive_balance CHECK ((balance >= 0))
 );
 
 
