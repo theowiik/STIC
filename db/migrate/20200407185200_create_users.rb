@@ -8,6 +8,6 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    execute 'ALTER TABLE users ADD CONSTRAINT non_negative_balance CHECK(balance >= 0);'
+    execute 'ALTER TABLE users ADD CONSTRAINT positive_balance CHECK(balance >= 0);'
   end
 end
