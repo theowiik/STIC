@@ -112,7 +112,7 @@ class SlotMachine < ApplicationRecord
     output = []
 
     line.bitmap.each_with_index do |bit, i|
-      next if bit != '1'
+      next if bit == '0'
 
       row = i / columns
       column = i - row * columns
