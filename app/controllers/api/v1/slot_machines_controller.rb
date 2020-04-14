@@ -17,28 +17,28 @@ module Api
           return generate_error(400, 'Invalid bet: bet must be greater than 0.')
         end
 
-        begin
+        # begin
           if user.decrement(:balance, bet).save
             slot_machine = SlotMachine.find(params[:id])
             grid = slot_machine.random_grid
 
             print_grid(grid)
 
-            render json: {
+            return render json: {
               status: 200,
               payout: slot_machine.calculate_payout(grid, bet),
               balance: user.balance,
               matrix: grid
             }
           else
-            generate_error(
+            return generate_error(
               400,
               'Insufficient funds: you dont have sufficient funds to play this.'
             )
           end
-        rescue
+        # rescue
           generate_error(500, 'Unkown error.')
-        end
+        # end
       end
 
       private
