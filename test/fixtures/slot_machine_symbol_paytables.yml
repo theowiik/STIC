@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  slot_machine_symbol: one
+  occurrences: 1
+  pay: 1
+
+two:
+  slot_machine_symbol: two
+  occurrences: 1
+  pay: 1
