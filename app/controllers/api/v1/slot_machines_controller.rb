@@ -9,39 +9,33 @@ module Api
       end
 
       def spin
-        bet = params[:bet].to_i # will be given by params
-        user = User.all.sample  # sample user
-        no_bet = false          # if no bet was provided
+        bet = params[:bet].to_i
+        user = User.all.sample
 
         # Invalid bet
-        if bet <= 0 || no_bet
-          return render json:
-            {
-              status: 400,
-              error: {
-                message: 'Invalid bet: bet must be greater than 0.'
-              }
-            }
+        if bet <= 0
+          return generate_error(400, 'Invalid bet: bet must be greater than 0.')
         end
 
-        # Affords
-        if user.decrement(:balance, bet).save
-          slot_machine = SlotMachine.find(params[:id])
-          render json: {
-            status: 200,
-            matrix: slot_machine.random_grid,
-            balance: user.balance,
-            payout: 1000
-          }
+        begin
+          if user.decrement(:balance, bet).save
+            slot_machine = SlotMachine.find(params[:id])
+            grid = slot_machine.random_grid
 
-        # Does not afford
-        else
-          render json: {
-            status: 400,
-            error: {
-              message: "Insufficient funds: you can't afford playing this. Poor person. lol"
+            render json: {
+              status: 200,
+              payout: slot_machine.calculate_payout(grid, bet),
+              balance: user.balance,
+              matrix: grid
             }
-          }
+          else
+            generate_error(
+              400,
+              'Insufficient funds: you dont have sufficient funds to play this.'
+            )
+          end
+        rescue
+          generate_error(500, 'Unkown error.')
         end
       end
     end
