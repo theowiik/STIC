@@ -78,9 +78,11 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.slot_machine_symbols (
     id bigint NOT NULL,
     name character varying NOT NULL,
+    ascii character varying NOT NULL,
     slot_machine_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    CONSTRAINT valid_ascii CHECK ((length((ascii)::text) = 1))
 );
 
 
