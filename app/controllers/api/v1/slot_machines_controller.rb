@@ -22,6 +22,8 @@ module Api
             slot_machine = SlotMachine.find(params[:id])
             grid = slot_machine.random_grid
 
+            print_grid(grid)
+
             render json: {
               status: 200,
               payout: slot_machine.calculate_payout(grid, bet),
@@ -37,6 +39,21 @@ module Api
         rescue
           generate_error(500, 'Unkown error.')
         end
+      end
+
+      private
+
+      def print_grid(grid)
+        puts '------ PREVIEW STARTED ------'
+
+        grid.each do |row|
+          row.each do |symbol|
+            print symbol.ascii + ' '
+          end
+          puts ''
+        end
+
+        puts '------ PREVIEW ENDED ------'
       end
     end
   end
