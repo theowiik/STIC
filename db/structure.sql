@@ -72,6 +72,39 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: slot_machine_symbol_paytables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.slot_machine_symbol_paytables (
+    id bigint NOT NULL,
+    slot_machine_symbol_id bigint NOT NULL,
+    occurrences integer NOT NULL,
+    pay integer NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: slot_machine_symbol_paytables_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.slot_machine_symbol_paytables_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: slot_machine_symbol_paytables_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.slot_machine_symbol_paytables_id_seq OWNED BY public.slot_machine_symbol_paytables.id;
+
+
+--
 -- Name: slot_machine_symbols; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -182,6 +215,13 @@ ALTER TABLE ONLY public.lines ALTER COLUMN id SET DEFAULT nextval('public.lines_
 
 
 --
+-- Name: slot_machine_symbol_paytables id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.slot_machine_symbol_paytables ALTER COLUMN id SET DEFAULT nextval('public.slot_machine_symbol_paytables_id_seq'::regclass);
+
+
+--
 -- Name: slot_machine_symbols id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -227,6 +267,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: slot_machine_symbol_paytables slot_machine_symbol_paytables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.slot_machine_symbol_paytables
+    ADD CONSTRAINT slot_machine_symbol_paytables_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: slot_machine_symbols slot_machine_symbols_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -251,10 +299,25 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: index_slot_machine_symbol_paytables_on_slot_machine_symbol_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_slot_machine_symbol_paytables_on_slot_machine_symbol_id ON public.slot_machine_symbol_paytables USING btree (slot_machine_symbol_id);
+
+
+--
 -- Name: index_slot_machine_symbols_on_slot_machine_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_slot_machine_symbols_on_slot_machine_id ON public.slot_machine_symbols USING btree (slot_machine_id);
+
+
+--
+-- Name: slot_machine_symbol_paytables fk_rails_60acaf402e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.slot_machine_symbol_paytables
+    ADD CONSTRAINT fk_rails_60acaf402e FOREIGN KEY (slot_machine_symbol_id) REFERENCES public.slot_machine_symbols(id);
 
 
 --
@@ -275,6 +338,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200406154940'),
 ('20200407160301'),
 ('20200407185200'),
-('20200413124203');
+('20200413124203'),
+('20200414154601');
 
 
