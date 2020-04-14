@@ -32,12 +32,11 @@ class SlotMachine < ApplicationRecord
   # @return [Integer] the payout.
   #
   def calculate_payout(grid, bet)
-    p grid
     raise ArgumentError, 'Grid is not a array' unless grid.is_a? Array
     raise ArgumentError, 'Bet is not numeric' unless bet.is_a? Integer
 
     payout = 0
-    winning_symbols = winning_symbols(random_grid, 1)
+    winning_symbols = winning_symbols(grid, 1)
 
     winning_symbols.each do |winning_symbol|
       payout += 10
@@ -93,7 +92,7 @@ class SlotMachine < ApplicationRecord
       # Count amount
       symbols_in_line.uniq { |e| e.id }.each do |symbol|
         n = symbols_in_line.select { |s| s.id == symbol.id }.count
-        output << symbol if n >= 3 # TODO: Add some logical reasoning here
+        output << symbol if n >= 3
       end
     end
 
@@ -115,11 +114,11 @@ class SlotMachine < ApplicationRecord
     output = []
 
     line.bitmap.split('').each_with_index do |bit, i|
-      next if bit == '0'
+      next unless bit == '1'
 
-      row = i / columns
-      column = i - row * columns
-      output << grid[row][column]
+      row_index = i / columns
+      column_index = i - row_index * columns
+      output << grid[row_index][column_index]
     end
 
     output
