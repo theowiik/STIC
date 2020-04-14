@@ -36,10 +36,11 @@ class SlotMachine < ApplicationRecord
     raise ArgumentError, 'Bet is not numeric' unless bet.is_a? Integer
 
     payout = 0
-    winning_symbols = winning_symbols(grid, 1)
+    winnings = winnings(grid, 1)
+    bet_multiplier = bet / 50
 
-    winning_symbols.each do |winning_symbol|
-      payout += 10
+    winnings.each do |winning|
+      payout += winning.value * bet_multiplier
     end
 
     payout
@@ -65,7 +66,7 @@ class SlotMachine < ApplicationRecord
 
   #
   # Given a grid of symbols (a list of rows) and the number of lines, returns
-  # an array of symbols that are the winning symbols.
+  # an array of wins. @see SlotMachineWin TODO: Fix @see
   #
   # @param [Array<Array<SlotMachineSymbol>>] grid the grid of symbols.
   # @param [Integer] n_lines the amount of lines to check.
@@ -74,9 +75,9 @@ class SlotMachine < ApplicationRecord
   # @raise [ArgumentError] if n_lines is not a integer.
   # @raise [RangeError] if n_lines is smaller than one.
   #
-  # @return [Array<SlotMachineSymbol>] an array of the winning symbols.
+  # @return [Array<SlotMachineWin>] an array of the winnings.
   #
-  def winning_symbols(grid, n_lines)
+  def winnings(grid, n_lines)
     raise ArgumentError, 'Grid is not a array' unless grid.is_a? Array
     raise ArgumentError, 'n_lines is not numeric' unless n_lines.is_a? Integer
     raise RangeError, 'n_lines must be greater than 0' unless n_lines.positive?
@@ -92,7 +93,10 @@ class SlotMachine < ApplicationRecord
       # Count amount
       symbols_in_line.uniq { |e| e.id }.each do |symbol|
         n = symbols_in_line.select { |s| s.id == symbol.id }.count
-        output << symbol if n >= 3
+        symbol_price = symbol.slot_machine_symbol_paytables.find_by(occurrences: n)
+        next if symbol_price.nil?
+
+        output << SlotMachineWin.new(symbol, n, symbol_price.pay)
       end
     end
 
