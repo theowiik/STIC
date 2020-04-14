@@ -10,19 +10,18 @@ class SlotMachine < ApplicationRecord
   # @return [Array<Array<>>] a grid of symbols.
   #
   def random_grid
-    rows = 3
     matrix = []
 
     rows.times do
-      matrix.push(random_row)
+      matrix << random_row
     end
 
     matrix
   end
 
   #
-  # Given a matrix of symbols (a list of rows) and a bet, returns
-  # how much winnings there are.
+  # Given a matrix of symbols (a list of rows) and a bet, returns the
+  # payout.
   #
   # @param [Array<Array<SlotMachineSymbol>>] grid the grid of symbols.
   # @param [<Type>] bet the bet amount.
@@ -32,11 +31,19 @@ class SlotMachine < ApplicationRecord
   #
   # @return [Integer] the payout.
   #
-  def calculate_winnings(grid, bet)
-    raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
+  def calculate_payout(grid, bet)
+    p grid
+    raise ArgumentError, 'Grid is not a array' unless grid.is_a? Array
     raise ArgumentError, 'Bet is not numeric' unless bet.is_a? Integer
 
-    bet * 10
+    payout = 0
+    winning_symbols = winning_symbols(random_grid, 1)
+
+    winning_symbols.each do |winning_symbol|
+      payout += 10
+    end
+
+    payout
   end
 
   private
@@ -71,8 +78,8 @@ class SlotMachine < ApplicationRecord
   # @return [Array<SlotMachineSymbol>] an array of the winning symbols.
   #
   def winning_symbols(grid, n_lines)
-    raise ArgumentError, 'Grid is not a array' unless bet.is_a? Array
-    raise ArgumentError, 'n_lines is not numeric' unless bet.is_a? Integer
+    raise ArgumentError, 'Grid is not a array' unless grid.is_a? Array
+    raise ArgumentError, 'n_lines is not numeric' unless n_lines.is_a? Integer
     raise RangeError, 'n_lines must be greater than 0' unless n_lines.positive?
 
     # TODO: Add another check if the width and height is correct.
@@ -84,7 +91,7 @@ class SlotMachine < ApplicationRecord
       symbols_in_line = symbols_in_line(grid, line)
 
       # Count amount
-      symbols_in_line.uniq(&id).each do |symbol|
+      symbols_in_line.uniq { |e| e.id }.each do |symbol|
         n = symbols_in_line.select { |s| s.id == symbol.id }.count
         output << symbol if n >= 3 # TODO: Add some logical reasoning here
       end
@@ -105,10 +112,9 @@ class SlotMachine < ApplicationRecord
   # @return [Array<SlotMachineSymbol>] an array of symbols
   #
   def symbols_in_line(grid, line)
-    columns = 3 # will be in the model
     output = []
 
-    line.bitmap.each_with_index do |bit, i|
+    line.bitmap.split('').each_with_index do |bit, i|
       next if bit == '0'
 
       row = i / columns
